@@ -19,3 +19,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.container{
+  display:grid;
+  grid-gap:1rem;
+}
+</style>

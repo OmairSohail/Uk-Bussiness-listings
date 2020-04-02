@@ -17,11 +17,7 @@
          <div class="form-group">
             <label for="categories">Categories</label>
             <select class="form-control" id="categories" v-model="category" required>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option v-for="c in categories" :key="c.id">{{c.category}}</option>
             </select>
         </div>
 
@@ -41,8 +37,7 @@
             <div class="form-group col-md-4">
             <label for="inputState">State</label>
             <select id="inputState" class="form-control" v-model="state" required>
-                <option selected>Choose...</option>
-                <option>...</option>
+                <option v-for="s in statedata" :key="s.id">{{s.state}}</option>
             </select>
             </div>
             <div class="form-group col-md-2">
@@ -67,6 +62,7 @@
 <script>
 import Swal from 'sweetalert2'
 import firebase from 'firebase'
+import axios from 'axios'
 export default {
     name:'standard',
     data(){
@@ -80,16 +76,67 @@ export default {
             city:'',
             state:'',
             zip:'',
-            image:''
+            image:'',
+            countrydata:[],
+             categories:[
+              {
+                  id:1,
+                  category:'arts'
+              },{
+                  id:2,
+                  category:'Industries'
+              },{
+                  id:3,
+                  category:'Communication'
+              },{
+                  id:4,
+                  category:'Computer Hardware'
+              },{
+                  id:5,
+                  category:'Computer Software'
+              },
+              {
+                  id:6,
+                  category:'arts'
+              },{
+                  id:7,
+                  category:'Industries'
+              },{
+                  id:8,
+                  category:'Communication'
+              },{
+                  id:9,
+                  category:'Computer Hardware'
+              },{
+                  id:10,
+                  category:'Computer Software'
+              },
+          ],
+            statedata:[
+                {id:1,state:'Sindh'},
+                {id:2,state:'Punjab'},
+                {id:3,state:'KPK'},
+                {id:4,state:'Balochistan'},
+                {id:5,state:'Azad Kashmir'},
+            ]
         }
+    },
+    created(){
+        console.log(this.countrydata)
+    },
+    computed:{
+     
     },
     methods: {
         submitListing:function(event){
             event.preventDefault();
-             const id = firebase.auth().currentUser.uid
+             const id = firebase.auth().currentUser.uid;
+             const email = firebase.auth().currentUser.email;
+             const now = new Date();
             //  const name = firebase.auth().currentUser.name
-             firebase.database().ref(`${id}/listings/standard/${this.bussinessname}`).set({
+             firebase.database().ref(`listings/standard/`).push({
                  bussinessName:this.bussinessname,
+                 email:email,
                  phone:this.phone,
                  address:this.address,
                  bussinessAddress:this.baddress,
@@ -99,7 +146,7 @@ export default {
                  zip:this.zip,
                  description:this.description,
                  image:this.image,
-                 postedAt:Date(),
+                 postedAt:now.toLocaleDateString()
                 //  name: name
              }).then(()=>{
                  Swal.fire(

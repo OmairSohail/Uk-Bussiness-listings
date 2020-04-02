@@ -10,13 +10,13 @@ export default new Vuex.Store({
   },
   mutations: {
     setUser:(state,payload) => {
-          state.user.push(payload)
+          state.user = payload
     },
     outUser: (state) => {
           state.user = ''
     },
     setListings: (state,payload) => {
-       state.listings.push(payload)
+       state.listings = payload
     }
   },
   actions: {
